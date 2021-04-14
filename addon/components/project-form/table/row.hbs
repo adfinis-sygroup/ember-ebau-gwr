@@ -1,0 +1,13 @@
+<tr ...attributes>
+  {{yield
+    (component
+      "project-form/table/td-wrapper"
+      model=@model
+      importData=@importData
+      translationBase=@translationBase
+      renderLabel=false
+      renderMargin=false
+      renderInput=@model.isNew
+    )
+  }}
+</tr>

@@ -2,7 +2,13 @@
   {{yield
     (component
       "project-form/field"
-      project=@project
+      model=@project
+      importData=@importData
+      translationBase=@translationBase
+    )
+    (component
+      "project-form/table"
+      model=@project
       importData=@importData
       translationBase=@translationBase
     )

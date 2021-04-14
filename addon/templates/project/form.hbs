@@ -54,7 +54,7 @@
       @importData={{if this.import this.importData}}
       @onSubmit={{this.saveProject}}
       @translationBase="ember-gwr.constructionProject.fields"
-      {{did-insert (perform this.fetchCalumaData)}} as |Field|
+      {{did-insert (perform this.fetchCalumaData)}} as |Field Table|
     >
       {{#unless this.project.isNew}}
         <div class="uk-flex uk-flex-wrap uk-flex-between">
@@ -84,7 +84,12 @@
         disabled
         readonly
       />
-      <Field type="number" @attr="constructionSurveyDeptNumber" disabled readonly />
+      <Field
+        type="number"
+        @attr="constructionSurveyDeptNumber"
+        disabled
+        readonly
+      />
 
       <Field
         @inputType="select"
@@ -174,8 +179,24 @@
       <h3>
         {{t "ember-gwr.components.projectForm.realEstateHeading"}}
       </h3>
-      <Field type="number" @attr="realestateIdentification.number" />
-      <Field type="number" @attr="realestateIdentification.EGRID" />
+      <Table
+        @attr="realestateIdentification"
+        @addEntry={{this.createRealestateIdentification}}
+        @headers={{
+          array
+          (t
+            "ember-gwr.constructionProject.fields.realestateIdentification.number"
+          )
+          (t
+            "ember-gwr.constructionProject.fields.realestateIdentification.EGRID"
+          )
+        }} as |Row|
+      >
+        <Row as |Field|>
+          <Field type="number" @attr="number" />
+          <Field type="number" @attr="EGRID" />
+        </Row>
+      </Table>
 
       <h3>
         {{t "ember-gwr.components.projectForm.clientHeading"}}
@@ -193,26 +214,26 @@
         <div class="uk-width-1-2 uk-margin-small-right">
           <Field
             @attr="client.identification.personIdentification.officialName"
-            @noMargin={{true}}
+            @renderMargin={{false}}
           />
         </div>
         <div class="uk-width-1-2">
           <Field
             @attr="client.identification.personIdentification.firstName"
-            @noMargin={{true}}
+            @renderMargin={{false}}
           />
         </div>
       </div>
 
       <div class="{{unless this.import "uk-flex"}} uk-margin">
         <div class={{if this.import "uk-margin" "uk-width-5-6"}}>
-          <Field @attr="client.address.street" @noMargin={{true}} />
+          <Field @attr="client.address.street" @renderMargin={{false}} />
         </div>
         <div class={{unless this.import "uk-width-1-6 uk-margin-small-left"}}>
           <Field
             type="number"
             @attr="client.address.houseNumber"
-            @noMargin={{true}}
+            @renderMargin={{false}}
           />
         </div>
       </div>
@@ -222,11 +243,11 @@
           <Field
             type="number"
             @attr="client.address.swissZipCode"
-            @noMargin={{true}}
+            @renderMargin={{false}}
           />
         </div>
         <div class={{unless this.import "uk-width-5-6 uk-margin-small-left"}}>
-          <Field @attr="client.address.town" @noMargin={{true}} />
+          <Field @attr="client.address.town" @renderMargin={{false}} />
         </div>
       </div>
       <Field

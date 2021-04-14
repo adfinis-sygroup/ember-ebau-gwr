@@ -17,7 +17,7 @@ export default class ProjectFormFieldComponent extends Component {
 
   get showDiff() {
     if (this.args.importData) {
-      const currentData = get(this.args.project, this.args.attr);
+      const currentData = get(this.args.model, this.args.attr);
       const newData = get(this.args.importData, this.args.attr);
       return !this.diffResolved && newData && newData !== currentData;
     }
@@ -28,8 +28,20 @@ export default class ProjectFormFieldComponent extends Component {
     return this.args.importData && !this.showDiff;
   }
 
+  get renderMargin() {
+    return this.args.renderMargin ?? true;
+  }
+
+  get renderLabel() {
+    return this.args.renderLabel ?? true;
+  }
+
+  get renderInput() {
+    return this.args.renderInput ?? true;
+  }
+
   @action
-  updateProjectField(attr, eventOrValue) {
+  updateField(attr, eventOrValue) {
     let value = eventOrValue?.target?.value ?? eventOrValue;
 
     if (this.args.convertValueTo) {
@@ -41,7 +53,7 @@ export default class ProjectFormFieldComponent extends Component {
     if (this.args.update) {
       this.args.update(attr, value);
     } else {
-      set(this.args.project, attr, value);
+      set(this.args.model, attr, value);
 
       if (this.args.importData) {
         this.diffResolved = true;

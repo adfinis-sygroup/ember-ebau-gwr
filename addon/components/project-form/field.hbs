@@ -1,31 +1,38 @@
-<ProjectForm::Label
-  @attr={{@attr}}
-  @required={{@required}}
-  @noMargin={{@noMargin}}
-  @translationBase={{@translationBase}}
->
+<div class={{if this.renderMargin "uk-margin"}}>
+  {{#if this.renderLabel}}
+    <ProjectForm::Label
+      @attr={{@attr}}
+      @required={{@required}}
+      @translationBase={{@translationBase}}
+    />
+  {{/if}}
+
   {{#if this.showDiff}}
     <ProjectForm::Diff
-      @current={{get @project @attr}}
+      @current={{get @model @attr}}
       @new={{get @importData @attr}}
-      @updateProjectField={{fn this.updateProjectField @attr}}
+      @updateProjectField={{fn this.updateField @attr}}
     />
   {{else}}
-    {{#let (component this.componentName) as |InputField|}}
-      <InputField
-        @attr={{@attr}}
-        @required={{@required}}
-        @value={{get @project @attr}}
-        @options={{@options}}
-        @noPlaceholder={{@noPlaceholder}}
-        @update={{fn (or @update this.updateProjectField) @attr}}
-        @translationBase={{@translationBase}}
-        @convertValueTo={{@convertValueTo}}
-        disabled={{this.disableInput}}
-        readonly={{this.disableInput}}
-        ...attributes
-        {{on "input" (fn this.updateProjectField @attr)}}
-      />
-    {{/let}}
+    {{#if this.renderInput}}
+      {{#let (component this.componentName) as |InputField|}}
+        <InputField
+          @attr={{@attr}}
+          @required={{@required}}
+          @value={{get @model @attr}}
+          @options={{@options}}
+          @noPlaceholder={{@noPlaceholder}}
+          @update={{fn (or @update this.updateField) @attr}}
+          @translationBase={{@translationBase}}
+          @convertValueTo={{@convertValueTo}}
+          disabled={{this.disableInput}}
+          readonly={{this.disableInput}}
+          ...attributes
+          {{on "input" (fn this.updateField @attr)}}
+        />
+      {{/let}}
+    {{else}}
+      {{get @model @attr}}
+    {{/if}}
   {{/if}}
-</ProjectForm::Label>
+</div>

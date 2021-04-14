@@ -4,6 +4,7 @@ import { inject as service } from "@ember/service";
 import { tracked } from "@glimmer/tracking";
 import { task, lastValue } from "ember-concurrency-decorators";
 import Options from "ember-ebau-gwr/models/options";
+import RealestateIdentification from "ember-ebau-gwr/models/realestate-identification";
 
 export default class ProjectFormController extends Controller {
   queryParams = ["import"];
@@ -72,5 +73,13 @@ export default class ProjectFormController extends Controller {
       await this.gwr.update(this.project);
     }
     this.import = false;
+  }
+
+  @action
+  createRealestateIdentification() {
+    this.project.realestateIdentification = [
+      new RealestateIdentification(),
+      ...this.project.realestateIdentification,
+    ];
   }
 }

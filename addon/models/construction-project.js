@@ -31,7 +31,7 @@ export default class ConstructionProject extends XMLModel {
   @tracked buildingPermitIssueDate;
   @tracked projectAnnouncementDate;
 
-  @tracked realestateIdentification = new RealestateIdentification();
+  @tracked realestateIdentification = [];
   @tracked client = new Client();
   @tracked constructionLocalisation = new ConstructionLocalisation();
   @tracked work = [];
@@ -62,7 +62,7 @@ export default class ConstructionProject extends XMLModel {
         projectFreeText1: String,
         projectFreeText2: String,
         projectStatus: Number,
-        realestateIdentification: RealestateIdentification,
+        realestateIdentification: [RealestateIdentification],
         client: Client,
         constructionLocalisation: ConstructionLocalisation,
         work: [BuildingWork],
@@ -76,7 +76,9 @@ export default class ConstructionProject extends XMLModel {
     <ns2:constructionSurveyDeptNumber>{{model.constructionSurveyDeptNumber}}</ns2:constructionSurveyDeptNumber>
     <ns2:constructionProjectDescription>{{model.constructionProjectDescription}}</ns2:constructionProjectDescription>
     {{> ConstructionLocalisation model=model.constructionLocalisation}}
-    {{> RealestateIdentification model=model.realestateIdentification}}
+    {{#each model.realestateIdentification as |realestateIdentification|}}
+      {{> RealestateIdentification model=realestateIdentification}}
+    {{/each}}
     <ns2:typeOfPermit>{{model.typeOfPermit}}</ns2:typeOfPermit>
     <ns2:typeOfClient>{{model.typeOfClient}}</ns2:typeOfClient>
     {{! this is accepted by the api but in the response the field is missing. Is this intended?}}

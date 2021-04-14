@@ -1,0 +1,35 @@
+<table class="uk-table" ...attributes>
+  <thead>
+    <tr>
+      {{#each @headers as |header|}}
+        <th>
+          {{header}}
+        </th>
+      {{/each}}
+      <th class="uk-table-shrink">
+        <UkButton @color="primary" @on-click={{@addEntry}}>
+          <span uk-icon="icon: plus"></span>
+          Eintrag hinzufügen
+        </UkButton>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each (or (get @model @attr) (array)) as |row|}}
+      {{yield
+        (component
+          "project-form/table/row"
+          model=row
+          importData=@importData
+          translationBase=@translationBase
+        )
+      }}
+    {{else}}
+      <tr>
+        <td colspan="99">
+          Keine Einträge
+        </td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

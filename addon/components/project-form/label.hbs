@@ -1,9 +1,6 @@
-<div class={{unless @noMargin "uk-margin"}}>
-  <label for={{@attr}} class={{if @required "uk-text-bold"}}>
-    {{t (concat @translationBase "." @attr)}} {{if
-      @required
-      (t "ember-gwr.components.projectForm.required")
-    }}
-  </label>
-  {{yield}}
-</div>
+<label for={{@attr}} class={{if @required "uk-text-bold"}}>
+  {{t (concat @translationBase "." @attr)}} {{if
+    @required
+    (t "ember-gwr.components.projectForm.required")
+  }}
+</label>
