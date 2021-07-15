@@ -3,8 +3,7 @@
   @on-submit={{perform this.submit}}
   @validateBeforeSubmit={{true}}
   class="validated-form"
-  ...attributes
-  as |f|
+  ...attributes as |f|
 >
   {{yield
     (component
@@ -14,23 +13,54 @@
       translationBase=@translationBase
       input=f.input
     )
+    (component
+      f.submit
+      type="submit"
+      label=(t "ember-gwr.components.modelForm.save")
+      disabled=this.isSaving
+      buttonComponent=(component
+        "model-form/submit" loading=this.isSaving color="primary"
+      )
+    )
+    (component
+      "error-footer"
+      errors=(if
+        f.model.isInvalid
+        (array (t "ember-gwr.components.modelForm.validationError"))
+        @errors
+      )
+    )
   }}
-
-  <f.submit
-    @type="submit"
-    @label={{t "ember-gwr.components.modelForm.save"}}
-    @disabled={{this.isSaving}}
-    @buttonComponent={{component
-      "model-form/submit"
-      loading=this.isSaving
-      color="primary"
-    }}
-  />
-
-  {{#if @importData}}
-    <LinkTo @query={{hash import=false}} class="uk-button uk-button-default">
-      {{t "ember-gwr.components.modelForm.cancelImport"}}
-    </LinkTo>
-  {{/if}}
-
+  <div class="uk-flex-inline uk-flex-nowrap uk-flex-top uk-margin-top">
+    <f.submit
+      class="uk-flex-none"
+      @type="submit"
+      @label={{t "ember-gwr.components.modelForm.save"}}
+      @disabled={{this.isSaving}}
+      @buttonComponent={{component
+        "model-form/submit"
+        loading=this.isSaving
+        color="primary"
+      }}
+    />
+    {{#if @importData}}
+      <LinkTo
+        @query={{hash import=false}}
+        class="uk-button uk-button-default uk-flex-none uk-margin-small-left"
+      >
+        {{t "ember-gwr.components.modelForm.cancelImport"}}
+      </LinkTo>
+    {{/if}}
+    {{#if (or f.model.isInvalid @errors)}}
+      <div class="uk-margin-left uk-flex-inline">
+        <ErrorFooter
+          @errors={{if
+            f.model.isInvalid
+            (array (t "ember-gwr.components.modelForm.validationError"))
+            @errors
+          }}
+        />
+      </div>
+    {{/if}}
+  </div>
 </ValidatedForm>

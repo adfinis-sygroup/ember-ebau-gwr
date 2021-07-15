@@ -5,9 +5,9 @@ ember-gwr:
     backToEntrance: Zurück zum Eingang
     createNewEntrance: Neuen Eingang erfassen
 
-    saveError: Beim Speichern des Eingangs ist ein Fehler aufgetretten.
+    saveError: Beim Speichern des Eingangs ist ein Fehler aufgetreten.
     saveSuccess: Eingang erfolgreich gespeichert.
-    loadingError: Beim Laden des Eingangs ist ein Fehler aufgetretten.
+    loadingError: Beim Laden des Eingangs ist ein Fehler aufgetreten.
     street: Strasse
     coordinates: Koordinaten
 
@@ -17,7 +17,7 @@ ember-gwr:
       heading: Strasse verknüpfen
       search: Strasse suchen
       linkSuccess: Strasse erfoglreich verknüpfen.
-      linkError: Bei der Verknüpfung der Strasse ist ein Fehler aufgetretten.
+      linkError: Bei der Verknüpfung der Strasse ist ein Fehler aufgetreten.
 
     fields:
       EDID: EDID

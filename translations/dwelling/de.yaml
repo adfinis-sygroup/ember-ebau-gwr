@@ -6,9 +6,9 @@ ember-gwr:
       heading: Wohnungsnutzung
 
 
-    saveError: Beim Speichern der Wohnung ist ein Fehler aufgetretten.
+    saveError: Beim Speichern der Wohnung ist ein Fehler aufgetreten.
     saveSuccess: Wohnung erfolgreich gespeichert.
-    loadingError: Beim Laden der Wohnung ist ein Fehler aufgetretten.
+    loadingError: Beim Laden der Wohnung ist ein Fehler aufgetreten.
 
     # Fields
     EDID: Eingang

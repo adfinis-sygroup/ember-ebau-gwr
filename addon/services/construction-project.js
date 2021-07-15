@@ -31,7 +31,13 @@ export default class ConstructionProjectService extends GwrService {
     );
 
     if (!response.ok) {
-      throw new Error("GWR API: modifyConstructionProject failed");
+      const xmlErrors = await response.text();
+      const errors = this.extractErrorsFromXML(
+        xmlErrors,
+        "GWR API: modifyConstructionProject failed"
+      );
+
+      throw new Error(errors);
     }
 
     const xml = await response.text();
@@ -46,7 +52,13 @@ export default class ConstructionProjectService extends GwrService {
     });
 
     if (!response.ok) {
-      throw new Error("GWR API: addConstructionProject failed");
+      const xmlErrors = await response.text();
+      const errors = this.extractErrorsFromXML(
+        xmlErrors,
+        "GWR API: addConstructionProject failed"
+      );
+
+      throw new Error(errors);
     }
 
     const xml = await response.text();

@@ -4,24 +4,38 @@
       <UkSpinner @ratio="3" />
     </div>
   {{else}}
-    <h2 class="uk-flex uk-flex-between">
-      <span>
-        {{#if this.dwelling.isNew}}
-          {{t "ember-gwr.dwelling.createNewDwelling"}}
-        {{else}}
-          {{t "ember-gwr.dwelling.title" id=this.dwelling.EWID}}
-        {{/if}}
-      </span>
-    </h2>
-
     <ModelForm
       @model={{this.dwelling}}
       @validations={{this.DwellingValidations}}
       @onSubmit={{this.saveDwelling}}
-      @translationBase="ember-gwr.dwelling"
-      as |Field|
+      @errors={{this.errors}}
+      @translationBase="ember-gwr.dwelling" as |Field Submit SubmitErrors|
     >
-
+      <div class="uk-flex uk-flex-between uk-flex-top">
+        <h2 class="uk-flex uk-flex-between">
+          <span>
+            {{#if this.dwelling.isNew}}
+              {{t "ember-gwr.dwelling.createNewDwelling"}}
+            {{else}}
+              {{t "ember-gwr.dwelling.title" id=this.dwelling.EWID}}
+            {{/if}}
+          </span>
+        </h2>
+        <div class="uk-flex uk-flex-column uk-flex-right">
+          <div class="uk-flex-inline uk-flex-right">
+            <Submit />
+          </div>
+          <div class="uk-margin-small-top uk-flex uk-flex-right">
+            <SubmitErrors />
+          </div>
+        </div>
+      </div>
+      <Header
+        @model={{this.dwelling}}
+        @modelId={{this.dwelling.EWID}}
+        @projectId={{this.router.currentRoute.attributes.projectId}}
+        @modelName={{"dwelling"}}
+      />
       <Field
         @attr="EDID"
         @type="select"

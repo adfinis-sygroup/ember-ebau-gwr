@@ -9,7 +9,9 @@ export default class ProjectController extends Controller {
 
   get displayLandingPage() {
     return (
-      !this.projects.length && this.router.currentRoute.localName !== "new"
+      !this.projects.length &&
+      this.router.currentRoute.localName !== "new" &&
+      this.router.currentRoute.localName !== "errors"
     );
   }
 
@@ -29,7 +31,7 @@ export default class ProjectController extends Controller {
 
     // Load the first project in the list if none is selected so we always display a project.
     if (
-      !["form", "new", "linked-buildings"].includes(
+      !["form", "new", "linked-buildings", "errors"].includes(
         this.router.currentRoute.localName
       ) &&
       projects.length

@@ -41,3 +41,45 @@ $ember-ebau-gwr-required-color: $alert-danger-color !default;
   text-decoration: none;
   min-height: $spinner-size;
 }
+
+#ember-ebau-gwr-status {
+  padding: $alert-padding;
+}
+
+.ember-ebau-gwr-label-width {
+  width: 120px;
+}
+
+.ember-ebau-gwr-label-color-danger {
+  color: $alert-danger-color;
+  border: 1px solid $alert-danger-color;
+  background-color: $alert-danger-background;
+}
+
+.ember-ebau-gwr-label-color-warning {
+  color: $alert-warning-color;
+  border: 1px solid $alert-warning-color;
+  background-color: $alert-warning-background;
+}
+
+.ember-ebau-gwr-label-color-success {
+  color: $alert-success-color;
+  border: 1px solid $alert-success-color;
+  background-color: $alert-success-background;
+}
+
+.ember-ebau-gwr-label-color-default {
+  color: $alert-color;
+  border: 1px solid $alert-color;
+  background-color: $alert-background;
+}
+
+.ember-ebau-gwr-error-footer-multiple {
+  text-transform: revert;
+}
+
+.ember-ebau-gwr-model-errors-success-icon {
+  polyline {
+    stroke-width: 2;
+  }
+}
