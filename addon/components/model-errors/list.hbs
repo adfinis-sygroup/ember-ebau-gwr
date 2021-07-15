@@ -1,0 +1,27 @@
+{{#if @model.errorList}}
+  {{#if @model.errorList.length}}
+    <ul class="uk-list uk-list-divider">
+      {{#each @model.errorList as |error|}}
+        <li>
+          <div class="uk-flex uk-flex-left uk-flex-top">
+            <div class="uk-flex-none ember-ebau-gwr-label-width">
+              <div
+                class="uk-label uk-text-small
+                  {{if
+                    (eq error.action "Refused")
+                    "ember-ebau-gwr-label-color-danger"
+                    "ember-ebau-gwr-label-color-warning"
+                  }}"
+              >
+                {{error.action}}
+              </div>
+            </div>
+            <div class="uk-margin-left">
+              {{error.messageOfError}}
+            </div>
+          </div>
+        </li>
+      {{/each}}
+    </ul>
+  {{/if}}
+{{/if}}

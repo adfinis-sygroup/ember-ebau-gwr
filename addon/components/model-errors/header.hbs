@@ -1,0 +1,21 @@
+<div class="uk-flex-inline uk-flex-top uk-width-expand">
+  <div class="uk-flex-none">
+    <LinkTo class="uk-text-bold" @route={{@linkRoute}} @models={{@linkModels}}>
+      {{@modelId}}
+    </LinkTo>
+  </div>
+  <div class="uk-margin-left uk-flex uk-width-expand uk-flex-column">
+    <div class="uk-flex-inline uk-flex-middle">
+      <div class="uk-text-bold">
+        {{@modelDescription}}
+      </div>
+      {{#unless this.errorCount}}
+        <div
+          class="ember-ebau-gwr-model-errors-success-icon uk-margin-small-left uk-text-success uk-text-bold uk-flex-inline uk-flex-middle uk-flex-center"
+          uk-icon="icon: check; ratio: 0.8"
+        ></div>
+      {{/unless}}
+    </div>
+    {{yield}}
+  </div>
+</div>

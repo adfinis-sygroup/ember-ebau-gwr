@@ -7,6 +7,7 @@ export default buildRoutes(function () {
     this.route("form", { path: "/:project_id/form" });
     this.route("new");
     this.route("linked-buildings", { path: "/:project_id/buildings" });
+    this.route("errors", { path: "/:project_id/errors" });
   });
   this.route("building", { path: "/:project_id/building/" }, function () {
     this.route("new");
