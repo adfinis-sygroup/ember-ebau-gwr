@@ -13,7 +13,7 @@ export default class DwellingService extends GwrService {
   cacheClass = Dwelling;
 
   async get(EWID, EGID) {
-    if (!EWID || !EGID) {
+    if ((!EWID && EWID !== 0) || !EGID) {
       return null;
     }
     const response = await this.authFetch.fetch(
@@ -43,7 +43,13 @@ export default class DwellingService extends GwrService {
     );
 
     if (!response.ok) {
-      throw new Error("GWR API: modifyDwelling failed");
+      const xmlErrors = await response.text();
+      const errors = this.extractErrorsFromXML(
+        xmlErrors,
+        "GWR API: modifyDwelling failed"
+      );
+
+      throw new Error(errors);
     }
 
     const xml = await response.text();
@@ -65,7 +71,13 @@ export default class DwellingService extends GwrService {
     );
 
     if (!response.ok) {
-      throw new Error("GWR API: reallocateDwelling failed");
+      const xmlErrors = await response.text();
+      const errors = this.extractErrorsFromXML(
+        xmlErrors,
+        "GWR API: reallocateDwelling failed"
+      );
+
+      throw new Error(errors);
     }
   }
 
@@ -84,7 +96,13 @@ export default class DwellingService extends GwrService {
     );
 
     if (!response.ok) {
-      throw new Error("GWR API: addDwelling failed");
+      const xmlErrors = await response.text();
+      const errors = this.extractErrorsFromXML(
+        xmlErrors,
+        "GWR API: addDwelling failed"
+      );
+
+      throw new Error(errors);
     }
 
     // Refresh building cache after adding a dwelling
@@ -109,7 +127,13 @@ export default class DwellingService extends GwrService {
       }
     );
     if (!response.ok) {
-      throw new Error("GWR API: deactivateDwelling failed");
+      const xmlErrors = await response.text();
+      const errors = this.extractErrorsFromXML(
+        xmlErrors,
+        "GWR API: deactivateDwelling failed"
+      );
+
+      throw new Error(errors);
     }
     // Refresh cache after removing the building
     /* eslint-disable-next-line ember/classic-decorator-no-classic-methods */

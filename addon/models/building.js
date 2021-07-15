@@ -3,6 +3,7 @@ import { tracked } from "@glimmer/tracking";
 import BuildingEntrance from "./building-entrance";
 import Coordinates from "./coordinates";
 import DateOfConstruction from "./date-of-construction";
+import ErrorList from "./error-list";
 import LocalId from "./local-id";
 import RealestateIdentification from "./realestate-identification";
 import ThermotechnicalDeviceForHeating from "./thermotechnical-device-for-heating";
@@ -112,6 +113,8 @@ export default class Building extends XMLModel {
   @tracked localId = [];
   @tracked buildingEntrance = [];
 
+  @tracked errorList;
+
   constructor(xmlOrObject, root = "building") {
     super(xmlOrObject);
     this.setFieldsFromXML({
@@ -147,6 +150,12 @@ export default class Building extends XMLModel {
         buildingFreeText2: String,
         localId: [LocalId],
         buildingEntrance: [BuildingEntrance],
+      },
+    });
+
+    this.setFieldsFromXML({
+      fields: {
+        errorList: [ErrorList],
       },
     });
   }

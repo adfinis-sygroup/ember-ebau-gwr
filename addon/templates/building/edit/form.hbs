@@ -1,35 +1,60 @@
+{{#if this.buildingWork.building.isNew}}
+  <LinkTo
+    @route={{"project.linked-buildings"}}
+    @model={{this.model.projectId}}
+    class="uk-link-muted uk-margin-small-bottom"
+  >
+    <span uk-icon="icon: arrow-left"></span>
+    {{t "ember-gwr.building.backToProject"}}
+  </LinkTo>
+{{/if}}
 <div>
-  {{#if this.fetchBuilding.isRunning}}
+  {{#if (or this.fetchBuildingWork.isRunning this.fetchBuilding.isRunning)}}
     <div class="uk-flex uk-flex-center uk-flex-middle uk-margin-large-top">
       <UkSpinner @ratio="3" />
     </div>
   {{else}}
-    <h2 class="uk-flex uk-flex-between">
-      <span>
-        {{#if this.buildingWork.building.isNew}}
-          {{t "ember-gwr.building.createNewBuilding"}}
-        {{else}}
-          {{t
-            "ember-gwr.building.title"
-            id=this.buildingWork.building.EGID
-            status=(t
-              (concat
-                "ember-gwr.building.buildingStatusOptions."
-                this.buildingWork.building.buildingStatus
-              )
-            )
-          }}
-        {{/if}}
-      </span>
-    </h2>
-
     <ModelForm
       @model={{this.buildingWork}}
       @validations={{this.BuildingWorkValidations}}
       @onSubmit={{this.saveBuildingWork}}
-      @translationBase="ember-gwr"
-      as |Field|
+      @errors={{this.errors}}
+      @translationBase="ember-gwr" as |Field Submit SubmitErrors|
     >
+      <div class="uk-flex uk-flex-between uk-flex-top">
+        <h2 class="uk-flex uk-flex-between">
+          <span>
+            {{#if this.buildingWork.building.isNew}}
+              {{t "ember-gwr.building.createNewBuilding"}}
+            {{else}}
+              {{t
+                "ember-gwr.building.title"
+                id=this.buildingWork.building.EGID
+                status=(t
+                  (concat
+                    "ember-gwr.building.buildingStatusOptions."
+                    this.buildingWork.building.buildingStatus
+                  )
+                )
+              }}
+            {{/if}}
+          </span>
+        </h2>
+        <div class="uk-flex uk-flex-column uk-flex-right">
+          <div class="uk-flex-inline uk-flex-right">
+            <Submit />
+          </div>
+          <div class="uk-margin-small-top uk-flex uk-flex-right">
+            <SubmitErrors />
+          </div>
+        </div>
+      </div>
+      <Header
+        @model={{this.building}}
+        @modelId={{this.building.EGID}}
+        @projectId={{this.model.projectId}}
+        @modelName={{"building"}}
+      />
       <h3>
         {{t
           "ember-gwr.building.sections.kindOfWorkForProject"

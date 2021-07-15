@@ -3,6 +3,7 @@ import { tracked } from "@glimmer/tracking";
 import BuildingWork from "./building-work";
 import Client from "./client";
 import ConstructionLocalisation from "./construction-localisation";
+import ErrorList from "./error-list";
 import RealestateIdentification from "./realestate-identification";
 import XMLModel from "./xml-model";
 
@@ -36,6 +37,8 @@ export default class ConstructionProject extends XMLModel {
   @tracked constructionLocalisation = new ConstructionLocalisation();
   @tracked work = [];
 
+  @tracked errorList = [];
+
   constructor(xmlOrObject, root = "constructionProject") {
     super(xmlOrObject);
     this.setFieldsFromXML({
@@ -66,6 +69,12 @@ export default class ConstructionProject extends XMLModel {
         client: Client,
         constructionLocalisation: ConstructionLocalisation,
         work: [BuildingWork],
+      },
+    });
+
+    this.setFieldsFromXML({
+      fields: {
+        errorList: [ErrorList],
       },
     });
 

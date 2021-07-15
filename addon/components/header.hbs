@@ -1,0 +1,65 @@
+<hr class="uk-margin-small-bottom" />
+{{#let (t (concat "ember-gwr.models." @modelName) count=1) as |modelName|}}
+  <div class="uk-flex uk-flex-between uk-flex-middle uk-flex-nowrap">
+    <div class="uk-flex-expand" id="ember-ebau-gwr-status">
+      <span class="uk-text-bold uk-margin-small-right">
+        {{t "ember-gwr.components.header.status.label"}}
+        :
+      </span>
+      <span class="uk-label ember-ebau-gwr-label-color-default">
+        {{t "ember-gwr.components.header.status.placeholder"}}
+      </span>
+    </div>
+    {{#unless @model.isNew}}
+      <div
+        uk-alert
+        class="{{if this.errorCount "uk-alert-danger" "uk-alert-success"}}
+           uk-flex-none uk-margin-remove uk-padding-small"
+      >
+        <span
+          class="uk-label
+            {{if this.errorCount "uk-label-danger" "uk-label-success"}}"
+        >
+          {{this.errorCount}}
+        </span>
+        <span class="uk-margin-small-left">
+          {{t
+            "ember-gwr.components.header.issues"
+            modelName=modelName
+            modelId=@modelId
+          }}
+        </span>
+      </div>
+      <div
+        uk-dropdown="pos: bottom-right"
+        class="uk-overflow-auto uk-padding-large uk-width-xlarge"
+      >
+        <h3 class="uk-margin-remove-bottom">
+          {{modelName}}
+          {{@modelId}}
+        </h3>
+        <LinkTo
+          @route={{"project.errors"}}
+          @model={{@projectId}}
+          class="uk-link-muted uk-text-small"
+        >
+          <span>
+            {{t "ember-gwr.components.header.linkIssues" projectId=@projectId}}
+          </span>
+          <span uk-icon="icon: arrow-right"></span>
+        </LinkTo>
+        <hr class="uk-margin-small-bottom" />
+        {{#if this.errorCount}}
+          <ModelErrors::List @model={{@model}} />
+        {{else}}
+          {{t
+            "ember-gwr.components.header.noIssues"
+            modelName=modelName
+            modelId=@modelId
+          }}
+        {{/if}}
+      </div>
+    {{/unless}}
+  </div>
+{{/let}}
+<hr class="uk-margin-small-top uk-margin-medium-bottom" />

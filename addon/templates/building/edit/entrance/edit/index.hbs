@@ -4,26 +4,40 @@
       <UkSpinner @ratio="3" />
     </div>
   {{else}}
-    <h2 class="uk-flex uk-flex-between">
-      <span>
-        {{#if this.buildingEntrance.isNew}}
-          {{t "ember-gwr.buildingEntrance.createNewEntrance"}}
-        {{else}}
-          {{t
-            "ember-gwr.buildingEntrance.title"
-            address=this.buildingEntrance.fullAddressText
-          }}
-        {{/if}}
-      </span>
-    </h2>
-
     <ProjectForm
       @project={{this.buildingEntrance}}
       @onSubmit={{this.saveBuildingEntrance}}
       @translationBase="ember-gwr.buildingEntrance.fields"
-      as |Field|
+      @errors={{this.errors}} as |Field Submit SubmitErrors|
     >
-
+      <div class="uk-flex uk-flex-between uk-flex-top">
+        <h2 class="uk-flex uk-flex-between">
+          <span>
+            {{#if this.buildingEntrance.isNew}}
+              {{t "ember-gwr.buildingEntrance.createNewEntrance"}}
+            {{else}}
+              {{t
+                "ember-gwr.buildingEntrance.title"
+                address=this.buildingEntrance.fullAddressText
+              }}
+            {{/if}}
+          </span>
+        </h2>
+        <div class="uk-flex uk-flex-column uk-flex-right">
+          <div class="uk-flex-inline uk-flex-right">
+            <Submit />
+          </div>
+          <div class="uk-margin-small-top uk-flex uk-flex-right">
+            <SubmitErrors />
+          </div>
+        </div>
+      </div>
+      <Header
+        @model={{this.buildingEntrance}}
+        @modelId={{this.buildingEntrance.EDID}}
+        @projectId={{this.router.currentRoute.attributes.projectId}}
+        @modelName={{"entrance"}}
+      />
       {{#unless this.buildingEntrance.isNew}}
         <Field @attr="EDID" type="number" readonly disabled />
       {{/unless}}

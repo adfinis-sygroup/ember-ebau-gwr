@@ -1,0 +1,19 @@
+{{#if @errors}}
+  {{#if (eq @errors.length 1)}}
+    <div
+      class="uk-alert-danger uk-text-small uk-flex-1 uk-margin-remove-bottom"
+      uk-alert
+    >
+      {{object-at 0 @errors}}
+    </div>
+  {{else}}
+    <button
+      type="button"
+      class="uk-button ember-ebau-gwr-error-footer-multiple uk-alert-danger uk-text-small uk-flex-1 uk-margin-remove-bottom"
+      uk-alert
+      {{on "click" this.updateCurrentIndex}}
+    >
+      {{object-at this.errorIndex @errors}}
+    </button>
+  {{/if}}
+{{/if}}

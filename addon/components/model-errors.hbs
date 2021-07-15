@@ -1,0 +1,13 @@
+<ModelErrors::Header
+    @model={{@model}}
+    @modelId={{@modelId}}
+    @linkRoute={{@linkRoute}}
+    @linkModels={{@linkModels}}  
+    @modelDescription={{@modelDescription}}  
+>
+    {{#if (has-block)}}
+        {{yield}}
+    {{else}}
+        <ModelErrors::List @model={{@model}} />
+    {{/if}}
+</ModelErrors::Header>

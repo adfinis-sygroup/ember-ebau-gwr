@@ -1,4 +1,4 @@
-<div {{did-insert this.onLoad}}>
+<div {{did-insert this.onLoad}} {{did-update this.onLoad}}>
   {{#if this.constructionProject.all.isRunning}}
     <div class="uk-flex uk-flex-center uk-flex-middle uk-margin-large-top">
       <UkSpinner @ratio="3" />
@@ -22,6 +22,15 @@
         >
           {{t "ember-gwr.models.building" count=1}}
         </Tab.link-item>
+        {{#if this.activeProject}}
+          <Tab.link-item
+            class="uk-position-right"
+            @route="project.errors"
+            @model={{this.activeProject}}
+          >
+            {{t "ember-gwr.issues.nav"}}
+          </Tab.link-item>
+        {{/if}}
       </UkTab>
       {{outlet}}
     {{/if}}

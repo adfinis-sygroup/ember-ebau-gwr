@@ -1,6 +1,6 @@
 ember-gwr:
   constructionProject:
-    saveError: Beim Speichern des Bauprojektes ist ein Fehler aufgetretten.
+    saveError: Beim Speichern des Bauprojektes ist ein Fehler aufgetreten.
     saveSuccess: Bauprojekt erfolgreich gespeichert.
 
     fields:

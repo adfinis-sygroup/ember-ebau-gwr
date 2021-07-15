@@ -34,16 +34,23 @@
       <Field @attr="otherWorks" @inputType="checkbox" />
     {{/let}}
   </Modal.body>
-  <Modal.footer class="uk-flex uk-flex-between">
-    <UkButton {{on "click" @close}}>
-      {{t "ember-gwr.components.linkBuildingModal.cancel"}}
-    </UkButton>
-    <UkButton
-      @color="primary"
-      @loading={{@isLoading}}
-      {{on "click" (fn @linkAction this.buildingWork)}}
-    >
-      {{t "ember-gwr.components.linkBuildingModal.linkBuilding"}}
-    </UkButton>
+  <Modal.footer class="uk-flex uk-flex-column">
+    <div class="uk-flex uk-flex-between">
+      <UkButton {{on "click" @close}}>
+        {{t "ember-gwr.components.linkBuildingModal.cancel"}}
+      </UkButton>
+      <UkButton
+        @color="primary"
+        @loading={{@isLoading}}
+        {{on "click" (fn @linkAction this.buildingWork)}}
+      >
+        {{t "ember-gwr.components.linkBuildingModal.linkBuilding"}}
+      </UkButton>
+    </div>
+    {{#if @errors}}
+    <div class="uk-flex uk-margin">
+      <ErrorFooter @errors={{@errors}} @expand={{true}} />
+    </div>
+    {{/if}}
   </Modal.footer>
 </UkModal>
