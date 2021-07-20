@@ -17,6 +17,7 @@ export default class BuildingFormController extends Controller {
   @service intl;
   @service notification;
 
+  @tracked changeStatus = false;
   @tracked errors;
 
   get buildingStatusOptions() {
@@ -24,6 +25,13 @@ export default class BuildingFormController extends Controller {
     return this.model.buildingWork?.isNew
       ? [EXISTING, NOT_USABLE]
       : Models.Building.buildingStatusOptions;
+  }
+
+  get nextValidStates() {
+    console.log("nextValidStates");
+    const states = this.buildingAPI.nextValidStates(this.building.buildingStatus);
+    console.log("states:", states);
+    return states;
   }
 
   @lastValue("fetchBuildingWork") buildingWork;
@@ -38,6 +46,7 @@ export default class BuildingFormController extends Controller {
         this.model.projectId
       );
 
+      this.changeStatus = false;
       yield this.fetchBuilding.perform();
 
       return project.work?.find(
@@ -88,5 +97,12 @@ export default class BuildingFormController extends Controller {
       console.error(error);
       this.notification.danger(this.intl.t("ember-gwr.building.saveError"));
     }
+  }
+
+  @dropTask
+  *transitionState(newStatus) {
+    console.log("transitionState")
+    yield this.buildingAPI.transitionState(this.building, newStatus);
+    return [];
   }
 }

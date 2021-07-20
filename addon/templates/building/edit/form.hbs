@@ -41,8 +41,24 @@
           </span>
         </h2>
         <div class="uk-flex uk-flex-column uk-flex-right">
-          <div class="uk-flex-inline uk-flex-right">
+          <div class="uk-flex-inline uk-flex-right uk-flex-middle">
             <Submit />
+            <a href="" class="uk-icon-link" uk-icon="more-vertical"></a>
+            <div uk-dropdown="mode: click; pos: right-bottom">
+              <ul
+                class="uk-nav uk-dropdown-nav uk-list uk-list-divider uk-list-collapse"
+              >
+                <li>
+                  <button
+                    class="uk-button uk-text-secondary uk-width-1-1 uk-background-default uk-padding-remove"
+                    type="button"
+                    {{on "click" (fn (mut this.changeStatus) true)}}
+                  >
+                    {{t "ember-gwr.components.projectForm.changeStatus"}}
+                  </button>
+                </li>
+              </ul>
+            </div>
           </div>
           <div class="uk-margin-small-top uk-flex uk-flex-right">
             <SubmitErrors />
@@ -54,6 +70,11 @@
         @modelId={{this.building.EGID}}
         @projectId={{this.model.projectId}}
         @modelName={{"building"}}
+        @changeStatus={{this.changeStatus}}
+        @onCloseChangeStatus={{fn (mut this.changeStatus) false}}
+        @modelStatusOptions={{this.buildingStatusOptions}}
+        @nextValidStates={{this.nextValidStates}}
+        @onStatusChange={{this.transitionState}}
       />
       <h3>
         {{t

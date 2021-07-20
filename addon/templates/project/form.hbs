@@ -74,6 +74,7 @@
                   <button
                     class="uk-button uk-text-secondary uk-width-1-1 uk-background-default uk-padding-remove"
                     type="button"
+                    {{on "click" (fn (mut this.changeStatus) true)}}
                   >
                     {{t "ember-gwr.components.projectForm.changeStatus"}}
                   </button>
@@ -91,6 +92,11 @@
         @modelId={{this.project.EPROID}}
         @projectId={{this.project.EPROID}}
         @modelName={{"project"}}
+        @changeStatus={{this.changeStatus}}
+        @onCloseChangeStatus={{fn (mut this.changeStatus) false}}
+        @modelStatusOptions={{this.choiceOptions.projectStatusOptions}}
+        @nextValidStates={{this.nextValidStates}}
+        @onStatusChange={{this.transitionState}}
       />
       {{#unless this.project.isNew}}
         <div class="uk-flex uk-flex-wrap uk-flex-between">

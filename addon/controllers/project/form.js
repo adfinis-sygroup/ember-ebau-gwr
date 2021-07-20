@@ -19,6 +19,7 @@ export default class ProjectFormController extends Controller {
   @service notification;
 
   @tracked import = false;
+  @tracked changeStatus = false;
   @tracked isOrganisation;
   @tracked errors;
 
@@ -28,6 +29,13 @@ export default class ProjectFormController extends Controller {
     return this.router.currentRouteName;
   }
 
+  get nextValidStates() {
+    console.log("nextValidStates");
+    const states = this.constructionProject.nextValidStates(this.project.projectStatus);
+    console.log("states:", states);
+    return states;
+  }
+
   @lastValue("fetchProject") project;
   @task
   *fetchProject() {
@@ -35,6 +43,7 @@ export default class ProjectFormController extends Controller {
       ? this.model.project
       : yield this.constructionProject.getFromCacheOrApi(this.model.projectId);
     this.isOrganisation = project.client.identification.isOrganisation;
+    this.changeStatus = false;
     return project;
   }
 
@@ -97,5 +106,12 @@ export default class ProjectFormController extends Controller {
         this.intl.t("ember-gwr.constructionProject.saveError")
       );
     }
+  }
+
+  @dropTask
+  *transitionState(newStatus) {
+    console.log("transitionState")
+    yield this.constructionProject.transitionState(this.project, newStatus);
+    return [];
   }
 }

@@ -107,6 +107,7 @@ export default class Dwelling extends XMLModel {
     3004, // Bestehend
     3005, // Nicht nutzbar
     3007, // Aufgehoben
+    3008, // Nicht realisiert
   ];
 
   get floorLabel() {

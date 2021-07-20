@@ -37,6 +37,7 @@ export default class ConstructionProject extends XMLModel {
   @tracked constructionLocalisation = new ConstructionLocalisation();
   @tracked work = [];
 
+  @tracked projectStatus;
   @tracked errorList = [];
 
   constructor(xmlOrObject, root = "constructionProject") {
@@ -130,6 +131,20 @@ export default class ConstructionProject extends XMLModel {
       <ns2:work>
         <ns2:kindOfWork>6002</ns2:kindOfWork>
       </ns2:work>
+
+      {{!--
+      {{#each model.work}}
+        {{> BuildingWork model=this}}
+      {{/each}}
+      <ns2:work>
+        <ns2:kindOfWork>6002</ns2:kindOfWork>
+        <ns2:building>
+          <ns2:EGID>
+            250554
+          </ns2:EGID>
+        </ns2:building>
+      </ns2:work>
+      --}}
     {{/if}}
   </ns2:constructionProject>
   `;

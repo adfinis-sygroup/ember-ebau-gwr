@@ -46,6 +46,10 @@ $ember-ebau-gwr-required-color: $alert-danger-color !default;
   padding: $alert-padding;
 }
 
+#ember-ebau-gwr-header-status {
+  text-transform: revert;
+}
+
 .ember-ebau-gwr-label-width {
   width: 120px;
 }

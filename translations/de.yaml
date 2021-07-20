@@ -90,6 +90,38 @@ ember-gwr:
       entrances: Verknüpfte Eingänge
       dwellings: Verknüpfte Wohnungen
 
+  lifeCycles:
+    project:
+      statusOptions:
+        6701: Baugesuch eingereicht
+        6702: Baubewilligung erteilt (rechtswirksam)
+        6703: Baubegonnen
+        6704: Abgeschlossen
+        6706: Projekt sistiert
+        6707: Baugesuch abgelehnt (rechtswirksam)
+        6708: Nicht realisiert
+        6709: Zurückgezogen
+
+    building:
+      statusOptions:
+        1001: Projektiert
+        1002: Bewilligt
+        1003: Im Bau
+        1004: Bestehend
+        1005: Nicht nutzbar
+        1007: Abgebrochen
+        1008: Nicht realisiert
+
+    dwelling:
+      statusOptions:
+        3001: Projektiert
+        3002: Bewilligt
+        3003: Im Bau
+        3004: Bestehend
+        3005: Nicht nutzbar
+        3007: Aufgehoben
+        3008: Nicht realisiert
+
   components:
     search:
       loading: Laden...

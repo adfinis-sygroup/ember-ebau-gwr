@@ -8,6 +8,48 @@ export default class ConstructionProjectService extends GwrService {
   cacheKey = "EPROID";
   cacheClass = ConstructionProject;
 
+  static projectStatesMapping = {
+    6701: [6702, 6707, 6709, 6708, 6706], // Baugesuch eingereicht
+    6702: [6703, 6709, 6708, 6706], // Baubewilligung erteilt (rechtswirksam)
+    6703: [6704, 6708, 6706], // Baubegonnen
+    6704: [], // Abgeschlossen
+    6706: [6701, 6702, 6708, 6703], // Projekt sistiert
+    6707: [], // Baugesuch abgelehnt (rechtswirksam)
+    6708: [], // Nicht realisiert
+    6709: [], // Zurückgezogen
+  };
+
+  static projectTransitionMapping = {
+    6701: {
+      6702: "setToApprovedConstructionProject",
+      6707: "setToRefusedConstructionProject",
+      6709: "setToCancelledConstructionProject",
+      6708: "setToWithdrawnConstructionProject",
+      6706: "setToSuspendedConstructionProject",
+    },
+    6702: {
+      6703: "setToStartConstructionProject",
+      6709: "setToCancelledConstructionProject",
+      6708: "setToWithdrawnConstructionProject",
+      6706: "setToSuspendConstructionProject",
+    },
+    6703: {
+      6704: "setToCompletedConstructionProject",
+      6708: "setToWithdrawnConstructionProject",
+      6706: "setToSuspendConstructionProject",
+    },
+    6704: {},
+    6706: {
+      6701: "setToCancelledSuspensionConstructionProject",
+      6702: "setToCancelledSuspensionConstructionProject",
+      6708: "setToWithdrawnConstructionProject",
+      6703: "setToCancelledSuspensionConstructionProject",
+    },
+    6707: {},
+    6708: {},
+    6709: {},
+  };
+
   async get(EPROID) {
     if (!EPROID) {
       return null;
@@ -89,5 +131,46 @@ export default class ConstructionProjectService extends GwrService {
       listKey: "constructionProject",
       searchKey: "constructionProjectsList",
     });
+  }
+
+  nextValidStates(state) {
+    return ConstructionProjectService.projectStatesMapping[state];
+  }
+
+  async transitionState(project, newState) {
+    console.log("status:", project.projectStatus);
+    console.log("newState:", newState);
+    console.log(
+      "transitionState:",
+      ConstructionProjectService.projectTransitionMapping[project.projectStatus][
+        newState
+      ]
+    );
+    console.log("date:", project.buildingPermitIssueDate);
+
+    const transition =
+      ConstructionProjectService.projectTransitionMapping[project.projectStatus][
+        newState
+      ];
+    const body = this.xml.buildXMLRequest(transition, project);
+    console.log("body:", body);
+
+    /*const response = await this.authFetch.fetch(
+      `/constructionprojects/${project.EPROID}/setToApprovedConstructionProject`,
+      {
+        method: "put",
+        body,
+      }
+    );*/
+
+    const response = await this.authFetch.fetch(
+      `/constructionprojects/${project.EPROID}/${transition}`,
+      {
+        method: "put",
+        body,
+      }
+    );
+
+    console.log("response:", response);
   }
 }
