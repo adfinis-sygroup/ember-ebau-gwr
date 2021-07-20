@@ -4,24 +4,59 @@
       <UkSpinner @ratio="3" />
     </div>
   {{else}}
-    <h2 class="uk-flex uk-flex-between">
-      <span>
-        {{#if this.dwelling.isNew}}
-          {{t "ember-gwr.dwelling.createNewDwelling"}}
-        {{else}}
-          {{t "ember-gwr.dwelling.title" id=this.dwelling.EWID}}
-        {{/if}}
-      </span>
-    </h2>
-
     <ModelForm
       @model={{this.dwelling}}
       @validations={{this.DwellingValidations}}
       @onSubmit={{this.saveDwelling}}
-      @translationBase="ember-gwr.dwelling"
-      as |Field|
+      @errors={{this.errors}}
+      @translationBase="ember-gwr.dwelling" as |Field Submit SubmitErrors|
     >
-
+      <div class="uk-flex uk-flex-between uk-flex-top">
+        <h2 class="uk-flex uk-flex-between">
+          <span>
+            {{#if this.dwelling.isNew}}
+              {{t "ember-gwr.dwelling.createNewDwelling"}}
+            {{else}}
+              {{t "ember-gwr.dwelling.title" id=this.dwelling.EWID}}
+            {{/if}}
+          </span>
+        </h2>
+        <div class="uk-flex uk-flex-column uk-flex-right">
+          <div class="uk-flex-inline uk-flex-right uk-flex-middle">
+            <Submit />
+            <a href="" class="uk-icon-link" uk-icon="more-vertical"></a>
+            <div uk-dropdown="mode: click; pos: right-bottom">
+              <ul
+                class="uk-nav uk-dropdown-nav uk-list uk-list-divider uk-list-collapse"
+              >
+                <li>
+                  <button
+                    class="uk-button uk-text-secondary uk-width-1-1 uk-background-default uk-padding-remove"
+                    type="button"
+                    {{on "click" (fn (mut this.changeStatus) true)}}
+                  >
+                    {{t "ember-gwr.components.projectForm.changeStatus"}}
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="uk-margin-small-top uk-flex uk-flex-right">
+            <SubmitErrors />
+          </div>
+        </div>
+      </div>
+      <Header
+        @model={{this.dwelling}}
+        @modelId={{this.dwelling.EWID}}
+        @projectId={{this.router.currentRoute.attributes.projectId}}
+        @modelName={{"dwelling"}}
+        @changeStatus={{this.changeStatus}}
+        @onCloseChangeStatus={{fn (mut this.changeStatus) false}}
+        @modelStatusOptions={{this.dwellingStatusOptions}}
+        @nextValidStates={{this.nextValidStates}}
+        @onStatusChange={{this.transitionState}}
+      />
       <Field
         @attr="EDID"
         @type="select"

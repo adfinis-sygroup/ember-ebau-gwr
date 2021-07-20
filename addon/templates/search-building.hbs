@@ -124,6 +124,7 @@
     @visible={{this.activeBuilding}}
     @close={{fn this.setActiveBuilding null}}
     @linkAction={{perform this.linkBuilding this.activeBuilding}}
+    @errors={{this.errors}}
     @isLoading={{this.linkBuilding.isRunning}}
   />
 {{/if}}

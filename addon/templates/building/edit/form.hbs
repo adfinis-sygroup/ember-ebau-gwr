@@ -1,35 +1,81 @@
+{{#if this.buildingWork.building.isNew}}
+  <LinkTo
+    @route={{"project.linked-buildings"}}
+    @model={{this.model.projectId}}
+    class="uk-link-muted uk-margin-small-bottom"
+  >
+    <span uk-icon="icon: arrow-left"></span>
+    {{t "ember-gwr.building.backToProject"}}
+  </LinkTo>
+{{/if}}
 <div>
-  {{#if this.fetchBuilding.isRunning}}
+  {{#if (or this.fetchBuildingWork.isRunning this.fetchBuilding.isRunning)}}
     <div class="uk-flex uk-flex-center uk-flex-middle uk-margin-large-top">
       <UkSpinner @ratio="3" />
     </div>
   {{else}}
-    <h2 class="uk-flex uk-flex-between">
-      <span>
-        {{#if this.buildingWork.building.isNew}}
-          {{t "ember-gwr.building.createNewBuilding"}}
-        {{else}}
-          {{t
-            "ember-gwr.building.title"
-            id=this.buildingWork.building.EGID
-            status=(t
-              (concat
-                "ember-gwr.building.buildingStatusOptions."
-                this.buildingWork.building.buildingStatus
-              )
-            )
-          }}
-        {{/if}}
-      </span>
-    </h2>
-
     <ModelForm
       @model={{this.buildingWork}}
       @validations={{this.BuildingWorkValidations}}
       @onSubmit={{this.saveBuildingWork}}
-      @translationBase="ember-gwr"
-      as |Field|
+      @errors={{this.errors}}
+      @translationBase="ember-gwr" as |Field Submit SubmitErrors|
     >
+      <div class="uk-flex uk-flex-between uk-flex-top">
+        <h2 class="uk-flex uk-flex-between">
+          <span>
+            {{#if this.buildingWork.building.isNew}}
+              {{t "ember-gwr.building.createNewBuilding"}}
+            {{else}}
+              {{t
+                "ember-gwr.building.title"
+                id=this.buildingWork.building.EGID
+                status=(t
+                  (concat
+                    "ember-gwr.building.buildingStatusOptions."
+                    this.buildingWork.building.buildingStatus
+                  )
+                )
+              }}
+            {{/if}}
+          </span>
+        </h2>
+        <div class="uk-flex uk-flex-column uk-flex-right">
+          <div class="uk-flex-inline uk-flex-right uk-flex-middle">
+            <Submit />
+            <a href="" class="uk-icon-link" uk-icon="more-vertical"></a>
+            <div uk-dropdown="mode: click; pos: right-bottom">
+              <ul
+                class="uk-nav uk-dropdown-nav uk-list uk-list-divider uk-list-collapse"
+              >
+                <li>
+                  <button
+                    class="uk-button uk-text-secondary uk-width-1-1 uk-background-default uk-padding-remove"
+                    type="button"
+                    {{on "click" (fn (mut this.changeStatus) true)}}
+                  >
+                    {{t "ember-gwr.components.projectForm.changeStatus"}}
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="uk-margin-small-top uk-flex uk-flex-right">
+            <SubmitErrors />
+          </div>
+        </div>
+      </div>
+      <Header
+        @model={{this.building}}
+        @modelId={{this.building.EGID}}
+        @projectId={{this.model.projectId}}
+        @modelName={{"building"}}
+        @changeStatus={{this.changeStatus}}
+        @onCloseChangeStatus={{fn (mut this.changeStatus) false}}
+        @modelStatusOptions={{this.buildingStatusOptions}}
+        @nextValidStates={{this.nextValidStates}}
+        @onStatusChange={{this.transitionState}}
+      />
       <h3>
         {{t
           "ember-gwr.building.sections.kindOfWorkForProject"

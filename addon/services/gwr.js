@@ -1,6 +1,8 @@
 import { assert } from "@ember/debug";
 import Service, { inject as service } from "@ember/service";
+import ErrorList from "ember-ebau-gwr/models/error-list";
 import SearchResult from "ember-ebau-gwr/models/search-result";
+import XMLModel from "ember-ebau-gwr/models/xml-model";
 
 /* eslint-disable ember/classic-decorator-no-classic-methods */
 export default class GwrService extends Service {
@@ -83,5 +85,32 @@ export default class GwrService extends Service {
     return new SearchResult(await response.text(), {
       [searchKey]: [listModel],
     })[searchKey];
+  }
+
+  extractErrorsFromXML(xml, message) {
+    const model = new XMLModel(xml);
+    model.setFieldsFromXML({
+      fields: {
+        error: [String],
+        errorList: [ErrorList],
+      },
+    });
+
+    const errors = JSON.stringify({
+      message,
+      error: model.error ? model.error : [],
+      errorList: model.errorList
+        ? model.errorList.map(
+            ({ ruleID, ruleCategory, action, messageOfError }) => ({
+              ruleID,
+              ruleCategory,
+              action,
+              messageOfError,
+            })
+          )
+        : [],
+    });
+
+    return errors;
   }
 }

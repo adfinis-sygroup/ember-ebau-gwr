@@ -2,6 +2,7 @@ import { tracked } from "@glimmer/tracking";
 
 import DateOfConstruction from "./date-of-construction";
 import DatePartiallyKnown from "./date-partially-known";
+import ErrorList from "./error-list";
 import { setRoot, setTemplate } from "./helpers";
 import RealestateIdentification from "./realestate-identification";
 import XMLModel from "./xml-model";
@@ -34,6 +35,8 @@ export default class Dwelling extends XMLModel {
   @tracked dwellingFreeText1;
   @tracked dwellingFreeText2;
 
+  @tracked errorList = [];
+
   // This is a frontend only state tracking property while creating new records.
   @tracked EDID;
 
@@ -59,6 +62,12 @@ export default class Dwelling extends XMLModel {
         realestateIdentification: RealestateIdentification,
         dwellingFreeText1: String,
         dwellingFreeText2: String,
+      },
+    });
+
+    this.setFieldsFromXML({
+      fields: {
+        errorList: [ErrorList],
       },
     });
   }
@@ -98,6 +107,7 @@ export default class Dwelling extends XMLModel {
     3004, // Bestehend
     3005, // Nicht nutzbar
     3007, // Aufgehoben
+    3008, // Nicht realisiert
   ];
 
   get floorLabel() {

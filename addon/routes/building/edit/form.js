@@ -7,6 +7,6 @@ export default class BuildingFormRoute extends Route {
 
   setupController(controller, model) {
     super.setupController(controller, model);
-    controller.fetchBuilding.perform();
+    controller.fetchBuildingWork.perform();
   }
 }

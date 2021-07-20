@@ -3,9 +3,13 @@ import dayjs from "dayjs";
 
 // All functions in this file will be registered to handlebars as helpers.
 
-export function echDate(date) {
+export function echDate(date, partial) {
   return typeof date === "object" && date !== null
     ? dayjs(date).format("YYYY-MM-DD")
+    : (date === "today" && partial === "year")
+    ? dayjs().format("YYYY")
+    : date === "today"
+    ? dayjs().format("YYYY-MM-DD")
     : date;
 }
 

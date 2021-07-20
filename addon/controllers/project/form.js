@@ -19,12 +19,21 @@ export default class ProjectFormController extends Controller {
   @service notification;
 
   @tracked import = false;
+  @tracked changeStatus = false;
   @tracked isOrganisation;
+  @tracked errors;
 
   choiceOptions = Options;
 
   get currentRoute() {
     return this.router.currentRouteName;
+  }
+
+  get nextValidStates() {
+    console.log("nextValidStates");
+    const states = this.constructionProject.nextValidStates(this.project.projectStatus);
+    console.log("states:", states);
+    return states;
   }
 
   @lastValue("fetchProject") project;
@@ -34,6 +43,7 @@ export default class ProjectFormController extends Controller {
       ? this.model.project
       : yield this.constructionProject.getFromCacheOrApi(this.model.projectId);
     this.isOrganisation = project.client.identification.isOrganisation;
+    this.changeStatus = false;
     return project;
   }
 
@@ -84,10 +94,24 @@ export default class ProjectFormController extends Controller {
         this.intl.t("ember-gwr.constructionProject.saveSuccess")
       );
     } catch (error) {
-      console.error(error);
+      const errors = JSON.parse(error.message);
+      this.errors = [
+        ...(errors.error.length || !errors.errorList.length
+          ? [this.intl.t("ember-gwr.generalErrors.genericFormError")]
+          : []),
+        ...errors.errorList.map((error) => error.messageOfError),
+      ];
+      console.log(error); // eslint-disable-line no-console
       this.notification.danger(
         this.intl.t("ember-gwr.constructionProject.saveError")
       );
     }
+  }
+
+  @dropTask
+  *transitionState(newStatus) {
+    console.log("transitionState")
+    yield this.constructionProject.transitionState(this.project, newStatus);
+    return [];
   }
 }

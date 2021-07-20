@@ -2,6 +2,7 @@ import { tracked } from "@glimmer/tracking";
 
 import Coordinates from "./coordinates";
 import Dwelling from "./dwelling";
+import ErrorList from "./error-list";
 import LocalId from "./local-id";
 import Locality from "./locality";
 import Street from "./street";
@@ -19,6 +20,8 @@ export default class BuildingEntrance extends XMLModel {
   @tracked locality = new Locality();
   @tracked dwelling = [];
 
+  @tracked errorList = [];
+
   constructor(xmlOrObject, root = "buildingEntrance") {
     super(xmlOrObject);
     this.setFieldsFromXML({
@@ -33,6 +36,12 @@ export default class BuildingEntrance extends XMLModel {
         locality: Locality,
         coordinates: Coordinates,
         dwelling: [Dwelling],
+      },
+    });
+
+    this.setFieldsFromXML({
+      fields: {
+        errorList: [ErrorList],
       },
     });
   }

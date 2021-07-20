@@ -1,5 +1,6 @@
 import Controller from "@ember/controller";
 import { inject as service } from "@ember/service";
+import { tracked } from "@glimmer/tracking";
 import { task, dropTask, lastValue } from "ember-concurrency-decorators";
 import Models from "ember-ebau-gwr/models";
 import DwellingValidations from "ember-ebau-gwr/validations/dwelling";
@@ -12,6 +13,19 @@ export default class BuildingEditDwellingEditController extends Controller {
   @service building;
   @service intl;
   @service notification;
+  @service router;
+
+  @tracked changeStatus = false;
+  @tracked errors;
+
+  dwellingStatusOptions = Models.Dwelling.dwellingStatusOptions;
+
+  get nextValidStates() {
+    console.log("nextValidStates");
+    const states = this.dwellingAPI.nextValidStates(this.dwelling.dwellingStatus);
+    console.log("states:", states);
+    return states;
+  }
 
   @lastValue("fetchDwelling") dwelling;
   @task
@@ -28,6 +42,7 @@ export default class BuildingEditDwellingEditController extends Controller {
         this.model.buildingId
       );
       dwelling.oldEDID = EDID;
+      this.changeStatus = false;
       return dwelling;
     } catch (error) {
       console.error(error);
@@ -71,8 +86,22 @@ export default class BuildingEditDwellingEditController extends Controller {
       }
       this.notification.success(this.intl.t("ember-gwr.dwelling.saveSuccess"));
     } catch (error) {
+      const errors = JSON.parse(error.message);
+      this.errors = [
+        ...(errors.error.length || !errors.errorList.length
+          ? [this.intl.t("ember-gwr.generalErrors.genericFormError")]
+          : []),
+        ...errors.errorList.map((error) => error.messageOfError),
+      ];
       console.error(error);
       this.notification.danger(this.intl.t("ember-gwr.dwelling.saveError"));
     }
+  }
+
+  @dropTask
+  *transitionState(newStatus) {
+    console.log("transitionState")
+    yield this.dwellingAPI.transitionState(this.dwelling, newStatus, this.model.buildingId);
+    return [];
   }
 }

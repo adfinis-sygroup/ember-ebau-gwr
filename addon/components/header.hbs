@@ -1,0 +1,194 @@
+<hr class="uk-margin-small-bottom" />
+{{#let
+  (t (concat "ember-gwr.models." @modelName) count=1)
+  (get @model (concat @modelName "Status")) as |modelName modelStatus|
+}}
+  <div class="uk-flex uk-flex-between uk-flex-middle uk-flex-nowrap">
+    <div
+      class="uk-flex-expand uk-flex-inline uk-flex-middle"
+      id="ember-ebau-gwr-status"
+    >
+      <span class="uk-text-bold uk-margin-small-right">
+        {{t "ember-gwr.components.header.status.label"}}
+      </span>
+      <input
+        class="uk-input uk-form-width-large"
+        type="text"
+        disabled
+        value={{t
+          (concat
+            "ember-gwr.lifeCycles." @modelName ".statusOptions." modelStatus
+          )
+        }}
+      />
+      {{!--<span
+        class="uk-label ember-ebau-gwr-label-color-default"
+        id="ember-ebau-gwr-header-status"
+      >
+        {{t
+          (concat
+            "ember-gwr.lifeCycles."
+            @modelName
+            ".statusOptions."
+            modelStatus
+          )
+        }}
+      </span>--}}
+    </div>
+    {{#unless @model.isNew}}
+      <div
+        uk-alert
+        class="{{if this.errorCount "uk-alert-danger" "uk-alert-success"}}
+           uk-flex-none uk-margin-remove uk-padding-small"
+      >
+        <span
+          class="uk-label
+            {{if this.errorCount "uk-label-danger" "uk-label-success"}}"
+        >
+          {{this.errorCount}}
+        </span>
+        <span class="uk-margin-small-left">
+          {{t
+            "ember-gwr.components.header.issues"
+            modelName=modelName
+            modelId=@modelId
+          }}
+        </span>
+      </div>
+      <div
+        uk-dropdown="pos: bottom-right"
+        class="uk-overflow-auto uk-padding-large uk-width-xlarge"
+      >
+        <h3 class="uk-margin-remove-bottom">
+          {{modelName}}
+          {{@modelId}}
+        </h3>
+        <LinkTo
+          @route={{"project.errors"}}
+          @model={{@projectId}}
+          class="uk-link-muted uk-text-small"
+        >
+          <span>
+            {{t "ember-gwr.components.header.linkIssues" projectId=@projectId}}
+          </span>
+          <span uk-icon="icon: arrow-right"></span>
+        </LinkTo>
+        <hr class="uk-margin-small-bottom" />
+        {{#if this.errorCount}}
+          <ModelErrors::List @model={{@model}} />
+        {{else}}
+          {{t
+            "ember-gwr.components.header.noIssues"
+            modelName=modelName
+            modelId=@modelId
+          }}
+        {{/if}}
+      </div>
+    {{/unless}}
+  </div>
+  {{#if @changeStatus}}
+    <div class="uk-card uk-card-default uk-margin uk-card-body">
+      <button
+        class="uk-position-top-right uk-margin-top uk-margin-right"
+        type="button"
+        uk-close
+        {{on "click" @onCloseChangeStatus}}
+      ></button>
+      <div class="uk-flex uk-flex-column uk-margin-right">
+        <div class="uk-flex uk-flex-between uk-flex-top">
+          <div class="uk-flex-inline uk-flex-middle">
+            <div class="uk-margin-right uk-text-bold">
+              Neuer Status
+            </div>
+            <div class="uk-flex">
+              <form>
+                <OneWaySelect
+                  class="uk-select"
+                  @value={{this.modelStatus}}
+                  @options={{this.statusOptions}}
+                  @optionTargetPath="status"
+                  @optionLabelPath="label"
+                  @update={{fn (mut this.newStatus)}}
+                />
+                {{!--<select class="uk-select" onchange={{this.changeStatus}}>
+                  {{log "modelStatusOptions:" @modelStatusOptions}}
+                  {{#each @modelStatusOptions as |statusOption|}}
+                    {{log "selected:" (eq modelStatus statusOption)}}
+                    <option selected={{eq modelStatus statusOption}}>
+                      {{t
+                        (concat
+                          "ember-gwr.lifeCycles."
+                          @modelName
+                          ".statusOptions."
+                          statusOption
+                        )
+                      }}
+                    </option>
+                  {{/each}}
+                </select>--}}
+              </form>
+            </div>
+          </div>
+          <div class="uk-flex uk-flex-right uk-flex-middle">
+            <div class="uk-margin-small-right" uk-icon="icon: question"></div>
+            <button
+              class="uk-button uk-button-default uk-margin-small-right"
+              type="button"
+              {{on "click" (perform this.checkValidity false)}}
+            >
+              Status korrigieren
+            </button>
+            <button
+              class="uk-button uk-button-primary"
+              type="button"
+              {{on "click" (perform this.checkValidity true)}}
+            >
+              Status ändern
+            </button>
+          </div>
+        </div>
+        <div
+          class="uk-flex-inline uk-margin-top uk-margin-remove-bottom uk-flex-top"
+          uk-alert
+        >
+          <div class="uk-flex-inline uk-flex-middle">
+            <div class="uk-margin-small-right" uk-icon="icon: info"></div>
+            <div class="uk-margin-right uk-flex-none">
+              Zulässige neue Stati für Statusänderungen:
+            </div>
+          </div>
+          {{log "nextValidStates:" @nextValidStates}}
+          <div class="uk-flex-inline uk-flex-wrap uk-width-expand">
+            {{#each @nextValidStates as |state index|}}
+              <div class="uk-flex-inline uk-flex-middle">
+                <div>
+                  {{t
+                    (concat
+                      "ember-gwr.lifeCycles." @modelName ".statusOptions." state
+                    )
+                  }}
+                </div>
+                {{#unless (eq index (dec @nextValidStates.length))}}
+                  <div class="uk-margin-small-left uk-margin-small-right">
+                    |
+                  </div>
+                {{/unless}}
+              </div>
+            {{/each}}
+            {{#if (not @nextValidStates.length)}}
+              <div class="uk-flex-inline uk-flex-middle">
+                Keine (Endstatus)
+              </div>
+            {{/if}}
+          </div>
+        </div>
+        {{#if this.errors.length}}
+          <div class="uk-margin-small-top">
+            <ErrorFooter @errors={{this.errors}} />
+          </div>
+        {{/if}}
+      </div>
+    </div>
+  {{/if}}
+{{/let}}
+<hr class="uk-margin-small-top uk-margin-medium-bottom" />

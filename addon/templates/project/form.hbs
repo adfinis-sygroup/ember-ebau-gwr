@@ -7,57 +7,97 @@
       <UkSpinner @ratio="3" />
     </div>
   {{else}}
-    <div class="uk-flex uk-flex-between">
-      <h2>
-        {{#if this.project.isNew}}
-          {{t "ember-gwr.landingPage.createNewProject"}}
-        {{else}}
-          {{t "ember-gwr.components.projectForm.title" id=@model.projectId}}
-        {{/if}}
-      </h2>
-      <div>
-        {{#if this.import}}
-          <button
-            class="uk-button uk-button-default"
-            type="button"
-            {{on "click" this.importCalumaData}}
-          >
-            {{t "ember-gwr.components.projectForm.applyAll"}}
-          </button>
-          <LinkTo
-            @query={{hash import=false}}
-            class="uk-button uk-button-default"
-          >
-            {{t "ember-gwr.components.projectForm.cancelImport"}}
-          </LinkTo>
-        {{else if this.project.isNew}}
-          <button
-            class="uk-button uk-button-primary"
-            type="button"
-            {{on "click" this.importCalumaData}}
-          >
-            {{t "ember-gwr.components.projectForm.importFromCaluma"}}
-          </button>
-        {{else}}
-          <LinkTo
-            @query={{hash import=true}}
-            class="uk-button uk-button-primary"
-          >
-            {{t "ember-gwr.components.projectForm.importFromCaluma"}}
-          </LinkTo>
-        {{/if}}
-      </div>
-    </div>
-
     <ModelForm
       @model={{this.project}}
       @validations={{this.ConstructionProjectValidations}}
       @importData={{if this.import this.importData}}
       @onSubmit={{this.saveProject}}
+      @errors={{this.errors}}
       @translationBase="ember-gwr.constructionProject.fields"
-      {{did-insert (perform this.fetchCalumaData)}}
-      as |Field|
+      {{did-insert (perform this.fetchCalumaData)
+      }} as |Field Submit SubmitErrors|
     >
+      <div class="uk-flex uk-flex-between uk-flex-top">
+        <h2>
+          {{#if this.project.isNew}}
+            {{t "ember-gwr.landingPage.createNewProject"}}
+          {{else}}
+            {{t "ember-gwr.components.projectForm.title" id=@model.projectId}}
+          {{/if}}
+        </h2>
+        <div class="uk-flex uk-flex-column uk-flex-right">
+          <div class="uk-flex-inline uk-flex-right uk-flex-middle">
+            {{#if this.import}}
+              <button
+                class="uk-button uk-button-default uk-margin-small-right"
+                type="button"
+                {{on "click" this.importCalumaData}}
+              >
+                {{t "ember-gwr.components.projectForm.applyAll"}}
+              </button>
+              <LinkTo
+                @query={{hash import=false}}
+                class="uk-button uk-button-default uk-margin-small-right"
+              >
+                {{t "ember-gwr.components.projectForm.cancelImport"}}
+              </LinkTo>
+            {{/if}}
+            <Submit />
+            <a href="" class="uk-icon-link" uk-icon="more-vertical"></a>
+            <div uk-dropdown="mode: click; pos: right-bottom">
+              <ul
+                class="uk-nav uk-dropdown-nav uk-list uk-list-divider uk-list-collapse"
+              >
+                <li>
+                  {{#if this.project.isNew}}
+                    <UkButton
+                      @disabled={{this.import}}
+                      class="uk-button uk-text-secondary uk-width-1-1 uk-background-default uk-padding-remove"
+                      type="button"
+                      {{on "click" this.importCalumaData}}
+                    >
+                      {{t "ember-gwr.components.projectForm.importFromCaluma"}}
+                    </UkButton>
+                  {{else}}
+                    <LinkTo
+                      @disabled={{this.import}}
+                      @query={{hash import=true}}
+                      class="uk-button
+                        {{if this.import "uk-text-muted" "uk-text-secondary"}}
+                         uk-width-1-1 uk-background-default uk-padding-remove"
+                    >
+                      {{t "ember-gwr.components.projectForm.importFromCaluma"}}
+                    </LinkTo>
+                  {{/if}}
+                </li>
+                <li>
+                  <button
+                    class="uk-button uk-text-secondary uk-width-1-1 uk-background-default uk-padding-remove"
+                    type="button"
+                    {{on "click" (fn (mut this.changeStatus) true)}}
+                  >
+                    {{t "ember-gwr.components.projectForm.changeStatus"}}
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="uk-margin-small-top uk-flex uk-flex-right">
+            <SubmitErrors />
+          </div>
+        </div>
+      </div>
+      <Header
+        @model={{this.project}}
+        @modelId={{this.project.EPROID}}
+        @projectId={{this.project.EPROID}}
+        @modelName={{"project"}}
+        @changeStatus={{this.changeStatus}}
+        @onCloseChangeStatus={{fn (mut this.changeStatus) false}}
+        @modelStatusOptions={{this.choiceOptions.projectStatusOptions}}
+        @nextValidStates={{this.nextValidStates}}
+        @onStatusChange={{this.transitionState}}
+      />
       {{#unless this.project.isNew}}
         <div class="uk-flex uk-flex-wrap uk-flex-between">
           <div class="uk-width-1-4@m uk-width-1">

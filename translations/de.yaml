@@ -23,9 +23,10 @@ ember-gwr:
       }
 
   generalErrors:
-    searchError: Bei der Suche ist ein Fehler aufgetretten.
+    searchError: Bei der Suche ist ein Fehler aufgetreten.
     loginError: Bei der Anmeldung an der GWR-Schnittstelle ist ein Fehler aufgetreten. Bitte versuchen Sie es nochmal.
     logoutError: Bei der Abmeldung von der GWR-Schnittstelle ist ein Fehler aufgetreten. Bitte versuchen Sie es nochmal.
+    genericFormError: Es ist ein Fehler bei der Bearbeitung ihrer Anfrage aufgetreten. Bitte überprüfen Sie die Angaben.
 
   landingPage:
     heading: Dieses Dossier ist noch nicht mit einem GWR Projekt verknüpft
@@ -38,8 +39,8 @@ ember-gwr:
     linkedBuildings: Verknüpfte Gebäude
 
   linkedBuildings:
-    error: Beim Laden der Projektdaten ist ein Fehler aufgetretten.
-    removeLinkError: Beim Entfernen der Verknüpfung ist ein Fehler aufgetretten.
+    error: Beim Laden der Projektdaten ist ein Fehler aufgetreten.
+    removeLinkError: Beim Entfernen der Verknüpfung ist ein Fehler aufgetreten.
 
   searchBuilding:
     heading: Existierendes Gebäude verknüpfen
@@ -52,7 +53,7 @@ ember-gwr:
     entrances: Gebäudeeingänge
 
     linkSuccess: Gebäude wurde erfolgreich verknüpft.
-    linkError: Bei der Verknüpfung des Gebäudes ist ein Fehler aufgetretten.
+    linkError: Bei der Verknüpfung des Gebäudes ist ein Fehler aufgetreten.
 
   searchProject:
     heading: Existierendes Bauprojekt verknüpfen
@@ -78,7 +79,48 @@ ember-gwr:
       false: Nur ohne Fehler
 
     realestateIdentification:
-        number: Grundstücksnummer
+      number: Grundstücksnummer
+
+  issues:
+    nav: Offene Pendenzen
+    infoAlert: In diesem Bauprojekt sind {count} Problem(e) vorhanden, welche die weitere Bearbeitung des Bauprojektes verhindern.
+    infoSuccess: In diesem Bauprojekt ist alles in Ordnung.
+    switcher:
+      issues: Pendenzen
+      entrances: Verknüpfte Eingänge
+      dwellings: Verknüpfte Wohnungen
+
+  lifeCycles:
+    project:
+      statusOptions:
+        6701: Baugesuch eingereicht
+        6702: Baubewilligung erteilt (rechtswirksam)
+        6703: Baubegonnen
+        6704: Abgeschlossen
+        6706: Projekt sistiert
+        6707: Baugesuch abgelehnt (rechtswirksam)
+        6708: Nicht realisiert
+        6709: Zurückgezogen
+
+    building:
+      statusOptions:
+        1001: Projektiert
+        1002: Bewilligt
+        1003: Im Bau
+        1004: Bestehend
+        1005: Nicht nutzbar
+        1007: Abgebrochen
+        1008: Nicht realisiert
+
+    dwelling:
+      statusOptions:
+        3001: Projektiert
+        3002: Bewilligt
+        3003: Im Bau
+        3004: Bestehend
+        3005: Nicht nutzbar
+        3007: Aufgehoben
+        3008: Nicht realisiert
 
   components:
     search:
@@ -123,6 +165,7 @@ ember-gwr:
       cancelImport: Import abbrechen
       applyAll: Alles übernehmen
       importFromCaluma: Baugesuchsdaten importieren
+      changeStatus: Status ändern
       dates: Daten
       datePlaceholder: Wählen Sie ein Datum...
       title: Bauprojekt {id}
@@ -144,6 +187,7 @@ ember-gwr:
       title: Bauprojekt {id}
       realEstateHeading: Grundstücksidentifikation
       clientHeading: Auftraggeber
+      validationError: Im Formular sind Eingabefehler vorhanden. Bitte korrigieren.
 
       diff:
         existingData: Existierende Daten im GWR
@@ -161,3 +205,11 @@ ember-gwr:
     linkBuildingModal:
       linkBuilding: Gebäude verknüpfen
       cancel: Abbrechen
+
+    header:
+      status: 
+        label: Status
+        placeholder: TODO
+      issues: Offene Pendenzen für {modelName} {modelId}
+      noIssues: Keine offenen Pendenzen für {modelName} {modelId}
+      linkIssues: Zur kompletten Pendenzenliste für Bauprojekt {projectId}

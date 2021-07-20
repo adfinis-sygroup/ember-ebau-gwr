@@ -9,6 +9,40 @@ export default class BuildingService extends GwrService {
   cacheKey = "EGID";
   cacheClass = Building;
 
+  static buildingStatesMapping = {
+    1001: [1002, 1008], // Projektiert
+    1002: [1003, 1008], // Bewilligt
+    1003: [1004, 1005], // Im Bau
+    1004: [1007], // Bestehend
+    1005: [1004, 1007], // Nicht nutzbar
+    1007: [], // Abgebrochen
+    1008: [], // Nicht realisiert
+  };
+
+  static buildingTransitionMapping = {
+    1001: {
+      1002: "setToApprovedConstructionProject", // TODO: maybe mark in construction project?
+      1008: "setToNotRealizedBuilding",
+    },
+    1002: {
+      1003: "setToBuildingConstructionStarted",
+      1008: "setToNotRealizedBuilding",
+    },
+    1003: {
+      1004: "setToCompletedBuilding",
+      1005: "setToUnusableBuilding",
+    },
+    1004: {
+      1007: "setToDemolishedBuilding",
+    },
+    1005: {
+      1004: "setToCompletedBuilding",
+      1007: "setToDemolishedBuilding",
+    },
+    1007: {},
+    1008: {},
+  }
+
   async unbindBuildingFromConstructionProject(EPROID, EGID) {
     const response = await this.authFetch.fetch(
       `/buildings/${EGID}/unbindToConstructionProject/${EPROID}`,
@@ -17,7 +51,13 @@ export default class BuildingService extends GwrService {
       }
     );
     if (!response.ok) {
-      throw new Error("GWR API: unbindBuildingFromConstructionProject failed");
+      const xmlErrors = await response.text();
+      const errors = this.extractErrorsFromXML(
+        xmlErrors,
+        "GWR API: unbindBuildingFromConstructionProject failed"
+      );
+
+      throw new Error(errors);
     }
     // Refresh cache after removing the building
     /* eslint-disable-next-line ember/classic-decorator-no-classic-methods */
@@ -38,11 +78,20 @@ export default class BuildingService extends GwrService {
       }
     );
     if (!response.ok) {
-      throw new Error("GWR API: bindBuildingToConstructionProject failed");
+      const xmlErrors = await response.text();
+      const errors = this.extractErrorsFromXML(
+        xmlErrors,
+        "GWR API: bindBuildingToConstructionProject failed"
+      );
+
+      throw new Error(errors);
     }
     // Update cache
     /* eslint-disable-next-line ember/classic-decorator-no-classic-methods */
     this.constructionProject.get(EPROID);
+
+    const xml = await response.text();
+    return this.createAndCache(xml);
   }
 
   async update(building) {
@@ -54,11 +103,17 @@ export default class BuildingService extends GwrService {
     });
 
     if (!response.ok) {
-      throw new Error("GWR API: modifyBuilding failed");
+      const xmlErrors = await response.text();
+      const errors = this.extractErrorsFromXML(
+        xmlErrors,
+        "GWR API: modifyBuilding failed"
+      );
+
+      throw new Error(errors);
     }
 
     const xml = await response.text();
-    return new Building(xml);
+    return this.createAndCache(xml);
   }
 
   async create(building) {
@@ -69,11 +124,17 @@ export default class BuildingService extends GwrService {
     });
 
     if (!response.ok) {
-      throw new Error("GWR API: addBuilding failed");
+      const xmlErrors = await response.text();
+      const errors = this.extractErrorsFromXML(
+        xmlErrors,
+        "GWR API: addBuilding failed"
+      );
+
+      throw new Error(errors);
     }
 
     const xml = await response.text();
-    return new Building(xml);
+    return this.createAndCache(xml);
   }
 
   async get(EGID) {
@@ -93,5 +154,41 @@ export default class BuildingService extends GwrService {
       listKey: "building",
       searchKey: "buildingsList",
     });
+  }
+
+  nextValidStates(state) {
+    return BuildingService.buildingStatesMapping[state];
+  }
+
+  async transitionState(building, newState) {
+    console.log("status:", building.buildingStatus);
+    console.log("newState:", newState);
+    console.log(
+      "transitionState:",
+      BuildingService.buildingTransitionMapping[building.buildingStatus][newState]
+    );
+
+    const transition = BuildingService.buildingTransitionMapping[building.buildingStatus][newState];
+    const body = this.xml.buildXMLRequest(
+      transition,
+      building
+    );
+    console.log("body:", body);
+    
+    /*const response = await this.authFetch.fetch(
+      `/constructionprojects/${project.EPROID}/setToApprovedConstructionProject`,
+      {
+        method: "put",
+        body,
+      }
+    );*/
+
+    const response = await this.authFetch.fetch(
+      `/buildings/${building.EGID}/${transition}`,
+      {
+        method: "put",
+        body,
+      }
+    );
   }
 }
