@@ -1,5 +1,7 @@
-import { validateNumber } from "ember-changeset-validations/validators";
-import { validatePresenceNested } from "ember-ebau-gwr/validators/presence-nested";
+import {
+  validateNumber,
+  validatePresence,
+} from "ember-changeset-validations/validators";
 
 export function coordinatesValidation(path = "") {
   /*eslint-disable prefer-template*/
@@ -11,7 +13,7 @@ export function coordinatesValidation(path = "") {
   return {
     coordinates: {
       north: [
-        validatePresenceNested({
+        validatePresence({
           presence: true,
           on: [eastPath, originPath],
         }),
@@ -19,12 +21,12 @@ export function coordinatesValidation(path = "") {
         validateNumber({ lte: 1300000.999, allowBlank: true }),
       ],
       east: [
-        validatePresenceNested({ presence: true, on: [northPath, originPath] }),
+        validatePresence({ presence: true, on: [northPath, originPath] }),
         validateNumber({ gte: 2480000.0, allowBlank: true }),
         validateNumber({ lte: 2840000.999, allowBlank: true }),
       ],
       originOfCoordinates: [
-        validatePresenceNested({
+        validatePresence({
           presence: true,
           on: [eastPath, northPath],
         }),
