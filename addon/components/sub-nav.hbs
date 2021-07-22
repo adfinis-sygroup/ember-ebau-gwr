@@ -11,7 +11,7 @@
   {{/if}}
   <UkTab ...attributes as |Tab|>
     {{#each @links as |link|}}
-      <Tab.link-item @route={{link.route}} @models={{link.models}}>
+      <Tab.link-item @route={{link.route}} @models={{or link.models (array)}}>
         {{link.text}}
       </Tab.link-item>
     {{/each}}

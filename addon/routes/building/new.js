@@ -1,5 +1,6 @@
 import { inject as service } from "@ember/service";
 import BuildingWork from "ember-ebau-gwr/models/building-work";
+import BuildingEntrance from "ember-ebau-gwr/models/building-entrance";
 import municipalities from "ember-ebau-gwr/models/municipalities";
 
 import BuildingFormRoute from "./edit/form";
@@ -19,7 +20,8 @@ export default class BuildingNewRoute extends BuildingFormRoute {
     buildingWork.building.municipalityName = municipalities[
       this.config.cantonAbbreviation
     ].find((m) => m.id === Number(this.building.municipality))?.name;
+    buildingWork.building.buildingEntrance = this.buildingEntrance.newRecord = new BuildingEntrance();
     model.buildingWork = buildingWork;
     return model;
-  }
+
 }

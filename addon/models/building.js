@@ -225,14 +225,7 @@ export default class Building extends XMLModel {
     {{/if}}
 
     {{#if model.isNew}}
-      <ns2:buildingEntrance>
-        <ns2:buildingEntranceNo>4</ns2:buildingEntranceNo>
-        <ns2:locality>
-          <ns2:name>
-            <ns2:nameLong>{{model.municipalityName}}</ns2:nameLong>
-          </ns2:name>
-        </ns2:locality>
-      </ns2:buildingEntrance>
+      {{> BuildingEntrance model.buildingEntrance}}
     {{/if}}
   </ns2:building>
 `;
